@@ -1,0 +1,22 @@
+<template>
+  {{ task }}
+  <v-card
+    width="400"
+    :title="task.t"
+    text="This is content">
+  </v-card>
+</template>
+
+<script lang='ts'>
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  props: {
+    task: {
+      type: Object,
+      required: true,
+    },
+  },
+  name: 'TaskItem',
+});
+</script>

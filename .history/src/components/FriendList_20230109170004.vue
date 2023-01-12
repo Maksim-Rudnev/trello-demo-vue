@@ -1,0 +1,32 @@
+<template>
+  <ul>
+    <li v-for="theme in themes" :key="theme.id">
+      {{ theme.name }}
+    </li>
+  </ul>
+</template>
+
+<script lang="ts">
+
+import { useObservable } from '@vueuse/rxjs';
+import { db } from '@/db';
+import mapActions from 'vuex';
+import { from } from 'rxjs';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'FriendList',
+  methods: {
+    ...mapActions({
+      setThemes: 'board/setThemes',
+    }),
+  },
+  data() {
+    return {
+      db,
+      themes: useObservable(from(db.themes.toArray())),
+    };
+  },
+
+});
+</script>

@@ -1,0 +1,78 @@
+<template>
+<v-form
+    ref="form"
+    v-model="valid"
+    lazy-validation
+  >
+    <v-text-field
+      v-model="name"
+      :counter="10"
+      :rules="nameRules"
+      label="Name"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      v-model="email"
+      :rules="emailRules"
+      label="E-mail"
+      required
+    ></v-text-field>
+
+    <v-btn
+      color="success"
+      class="mr-4"
+      @click="validate"
+    >
+      Validate
+    </v-btn>
+
+    <v-btn
+      color="error"
+      class="mr-4"
+      @click="reset"
+    >
+      Reset Form
+    </v-btn>
+  </v-form>
+</template>
+
+<script l>
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'AddTask',
+  data: () => ({
+    valid: true,
+    name: '',
+    nameRules: [
+      (v: string) => !!v || 'Name is required',
+      (v: string) => (v && v.length <= 10) || 'Name must be less than 10 characters',
+    ],
+    email: '',
+    emailRules: [
+      (v: string) => !!v || 'E-mail is required',
+      (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    ],
+    select: null,
+    items: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4',
+    ],
+    checkbox: false,
+  }),
+
+  methods: {
+    async validate() {
+      const { valid } = await this.$refs.form.validate();
+
+      if (valid) alert('Form is valid');
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+  },
+});
+</script>
