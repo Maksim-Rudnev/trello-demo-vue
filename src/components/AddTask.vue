@@ -5,21 +5,22 @@
     lazy-validation
   >
     <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
+      v-model="title"
+      :counter="20"
+      :rules="titleRules"
+      label="Title"
       required
     ></v-text-field>
 
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+    <v-textarea
+    :counter="300"
+      v-model="text"
+      :rules="textRules"
+      label="Text"
+      required></v-textarea>
 
-    <v-btn
+    <div class="d-flex justify-center mt-3">
+      <v-btn
       color="success"
       class="mr-4"
       @click="validate"
@@ -29,49 +30,67 @@
 
     <v-btn
       color="error"
-      class="mr-4"
       @click="reset"
     >
       Reset Form
     </v-btn>
+    </div>
   </v-form>
 </template>
 
 <script lang="ts">
+import { db } from '@/db';
 import { defineComponent } from 'vue';
+import { mapActions } from 'vuex';
 
 export default defineComponent({
   name: 'AddTask',
+  props: {
+    themeId: {
+      type: Number,
+      required: true,
+    },
+  },
   data: () => ({
     valid: true,
-    name: '',
-    nameRules: [
-      (v: string) => !!v || 'Name is required',
-      (v: string) => (v && v.length <= 10) || 'Name must be less than 10 characters',
+    title: '',
+    titleRules: [
+      (v: string) => !!v || 'Title is required',
+      (v: string) => (v && v.length <= 20) || 'Title must be less than 20 characters',
     ],
-    email: '',
-    emailRules: [
-      (v: string) => !!v || 'E-mail is required',
-      (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    text: '',
+    textRules: [
+      (v: string) => !!v || 'Text is required',
+      (v: string) => (v && v.length <= 300) || 'Text must be less than 300 characters',
     ],
-    select: null,
-    items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
-    checkbox: false,
   }),
 
   methods: {
+    ...mapActions({
+      setThemes: 'board/setThemes',
+      setTasks: 'board/setTasks',
+    }),
     async validate() {
-      const { valid } = await this.$refs.form.validate();
+      const { valid } = await (this.$refs.form as HTMLFormElement).validate();
 
-      if (valid) alert('Form is valid');
+      if (valid) {
+        try {
+          await db.tasks.add({
+            title: this.title,
+            text: this.text,
+            priority: 0,
+            themeId: this.themeId,
+          });
+          this.$emit('visibleAddModelClose');
+          this.setThemes();
+          this.setTasks();
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
     reset() {
-      this.$refs.form.reset();
+      (this.$refs.form as HTMLFormElement).reset();
     },
   },
 });

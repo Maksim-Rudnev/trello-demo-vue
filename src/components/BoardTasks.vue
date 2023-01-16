@@ -1,13 +1,18 @@
 <template>
     <div
-    class="d-flex flex-row mt-5 overflow-x-auto overflow-y-hidden"
-  >
-  <chapter-board
-    v-for="theme in themes"
-    :key="theme.id"
-    :theme="theme">
-  </chapter-board>
-  </div>
+    class="d-flex
+    flex-row mt-5
+    overflow-x-auto
+    overflow-y-hidden"
+    v-if="themes.length > 0"
+    >
+      <chapter-board
+        v-for="theme in themes"
+        :key="theme.id"
+        :theme="theme">
+      </chapter-board>
+    </div>
+    <h1 v-else>Пусто</h1>
 </template>
 
 <script lang='ts'>
@@ -33,6 +38,7 @@ export default defineComponent({
     }),
   },
   beforeMount() {
+    console.log(ChapterBoard);
     this.setThemes();
     this.setTasks();
   },
