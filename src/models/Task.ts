@@ -1,6 +1,6 @@
 export interface Task {
   id?: number;
-  title: string;
+  owner: string;
   text: string;
   priority: number;
   themeId: number;

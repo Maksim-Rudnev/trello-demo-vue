@@ -83,7 +83,7 @@ export default defineComponent({
     async addTask() {
       try {
         const id = await db.tasks.add({
-          title: this.taskTitle,
+          owner: this.taskTitle,
           text: this.taskText,
           priority: this.priority,
           themeId: this.themeId,

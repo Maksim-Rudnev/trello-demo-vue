@@ -1,39 +1,42 @@
+<!-- eslint-disable vuejs-accessibility/no-autofocus -->
 <template>
-<v-form
+  <v-form
     ref="form"
     v-model="valid"
     lazy-validation
   >
     <v-text-field
-      v-model="title"
+      autofocus
+      v-model="owner"
       :counter="20"
-      :rules="titleRules"
-      label="Title"
+      :rules="ownerRules"
+      label="Owner"
       required
     ></v-text-field>
 
     <v-textarea
-    :counter="300"
+      :counter="300"
       v-model="text"
       :rules="textRules"
       label="Text"
-      required></v-textarea>
+      required
+    ></v-textarea>
 
     <div class="d-flex justify-center mt-3">
       <v-btn
-      color="success"
-      class="mr-4"
-      @click="validate"
-    >
-      Validate
-    </v-btn>
+        color="success"
+        class="mr-4"
+        @click="validate"
+      >
+        submit
+      </v-btn>
 
-    <v-btn
-      color="error"
-      @click="reset"
-    >
-      Reset Form
-    </v-btn>
+      <v-btn
+        color="error"
+        @click="reset"
+      >
+        Reset Form
+      </v-btn>
     </div>
   </v-form>
 </template>
@@ -53,10 +56,10 @@ export default defineComponent({
   },
   data: () => ({
     valid: true,
-    title: '',
-    titleRules: [
-      (v: string) => !!v || 'Title is required',
-      (v: string) => (v && v.length <= 20) || 'Title must be less than 20 characters',
+    owner: '',
+    ownerRules: [
+      (v: string) => !!v || 'Owner is required',
+      (v: string) => (v && v.length <= 20) || 'Owner must be less than 20 characters',
     ],
     text: '',
     textRules: [
@@ -76,13 +79,12 @@ export default defineComponent({
       if (valid) {
         try {
           await db.tasks.add({
-            title: this.title,
+            owner: this.owner,
             text: this.text,
             priority: 0,
             themeId: this.themeId,
           });
-          this.$emit('visibleAddModelClose');
-          this.setThemes();
+          this.$emit('visibleAddTaskClose');
           this.setTasks();
         } catch (error) {
           console.log(error);

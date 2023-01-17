@@ -1,8 +1,7 @@
 <template>
   <v-card
     class="mb-3"
-    width="300"
-    :title="task.title"
+    :title="task.owner"
     :text="task.text">
   </v-card>
 </template>

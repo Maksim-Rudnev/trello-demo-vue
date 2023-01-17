@@ -1,13 +1,14 @@
 <template>
-  <div class="mx-5 pb-5">
+  <v-sheet min-width="300">
+    <div class="mx-3 pb-5">
     <v-card
       class="mb-5 bg-grey-lighten-2"
-      width="300"
       :title="theme.name">
     </v-card>
     <task-list
       :tasks="getTaskByThemeId(theme.id)">
     </task-list>
+
     <v-btn
       v-if="!visibleAddModel"
       variant="plain"
@@ -17,12 +18,14 @@
       v-on:click="openForm">
       + Add new card
     </v-btn>
+
     <v-card class="pa-3 d-flex flex-column justify-center"
       v-if="visibleAddModel">
       <add-task
         :themeId="theme.id"
-        @visibleAddModelClose="closeForm"
+        @visibleAddTaskClose="closeForm"
       />
+
       <v-btn
         variant="text"
         class="mt-4"
@@ -36,6 +39,7 @@
       </v-btn>
     </v-card>
   </div>
+  </v-sheet>
 </template>
 
 <script lang='ts'>

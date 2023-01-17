@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <task-item
-      v-for="task in tasks"
-      :task="task"
-      :key="task.id"
-    >
-    </task-item>
-  </div>
+  <task-item
+    v-for="task in tasks"
+    :task="task"
+    :key="task.id"
+  >
+  </task-item>
 </template>
 
 <script lang='ts'>
