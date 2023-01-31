@@ -6,16 +6,18 @@
     lazy-validation
   >
     <v-text-field
+      trim
       autofocus
       class="mb-1"
       v-model="theme"
-      :counter="30"
+      :counter="40"
       :rules="themeRules"
       label="Theme"
       required
     ></v-text-field>
     <div class="d-flex justify-center">
       <v-btn
+        class="mb-3"
         color="success"
         size="small"
         @click="validate"
@@ -36,13 +38,13 @@ import { defineComponent } from 'vue';
 import { mapActions } from 'vuex';
 
 export default defineComponent({
-  name: 'AddTheme',
+  name: 'ThemeForm',
   data: () => ({
     valid: true,
     theme: '',
     themeRules: [
       (v: string) => !!v || 'Theme is required',
-      (v: string) => (v && v.length <= 30) || 'Theme must be less than 30 characters',
+      (v: string) => (v && v.length <= 40) || 'Theme must be less than 40 characters',
     ],
   }),
 
@@ -59,7 +61,7 @@ export default defineComponent({
           await db.themes.add({
             name: this.theme,
           });
-          this.$emit('visibleAddThemeClose');
+          this.$emit('close');
           this.setThemes();
         } catch (error) {
           console.log(error);

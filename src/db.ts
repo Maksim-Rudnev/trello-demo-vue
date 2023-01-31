@@ -11,7 +11,7 @@ export class MySubClassedDexie extends Dexie {
     super('myDatabase');
     this.version(3).stores({
       themes: '++id',
-      tasks: '++id',
+      tasks: '++id, themeId',
     });
   }
 }

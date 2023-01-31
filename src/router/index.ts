@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import FriendList from '@/components/void/FriendList.vue';
+import FriendList from '@/components/SlideColors.vue';
 import HomeView from '@/views/HomeView.vue';
 
 const routes: Array<RouteRecordRaw> = [
