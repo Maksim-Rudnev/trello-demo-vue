@@ -2,13 +2,49 @@
   <draggable
     :list="tasksList"
     group="list"
-    :component-data="{name:'list', type: 'transition-group'}"
+    :component-data="{ name:'list',
+    type:'transition-group'}"
     itemKey="id"
     @change="log"
+    ghost-class="ghost"
     v-bind="dragOptions"
   >
     <template #item="{ element, index }">
-      <task-item :task="element" :index="index"/>
+      <task-item
+        :task="element"
+        :index="index"
+        class="border"
+      />
+    </template>
+    <template #footer>
+      <v-expansion-panels v-model="panel">
+        <v-expansion-panel
+          value="add"
+          elevation="0"
+          class="border"
+        >
+          <v-expansion-panel-title
+            style="opacity: .65;"
+            expand-icon="mdi-plus"
+            collapse-icon="mdi-minus"
+          >
+            <v-btn
+              variant="text"
+              disabled
+              style="opacity: 1;"
+            >
+              ADD TASK
+            </v-btn>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <task-form
+              @close="none"
+              class="pa-0"
+              :themeId="themeId"
+            />
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </template>
   </draggable>
 </template>
@@ -21,10 +57,11 @@ import draggable from 'vuedraggable';
 import { db } from '@/db';
 import { mapActions, mapMutations } from 'vuex';
 import TaskItem from './TaskItem.vue';
+import TaskForm from './TaskForm.vue';
 
 export default defineComponent({
   name: 'TaskList',
-  components: { TaskItem, draggable },
+  components: { TaskItem, draggable, TaskForm },
   props: {
     tasks: {
       type: Array as PropType<ITask[]>,
@@ -36,6 +73,7 @@ export default defineComponent({
   },
   data() {
     return {
+      panel: [],
       tasksList: [] as ITask[],
     };
   },
@@ -44,6 +82,9 @@ export default defineComponent({
   },
 
   methods: {
+    none() {
+      this.panel = [];
+    },
     refreshData() {
       this.tasksList = [...this.tasks];
     },
@@ -53,6 +94,7 @@ export default defineComponent({
           index: evt.added?.newIndex,
           themeId: this.themeId,
         });
+        this.setTasks();
       }
     },
     ...mapActions({
@@ -73,11 +115,20 @@ export default defineComponent({
   computed: {
     dragOptions() {
       return {
-        animation: 300,
+        animation: 250,
         disabled: false,
-        ghostClass: 'ghost',
       };
     },
   },
 });
 </script>
+<style>
+.border {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+.ghost {
+  opacity: 0;
+}
+</style>

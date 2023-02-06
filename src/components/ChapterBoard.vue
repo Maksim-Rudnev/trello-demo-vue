@@ -1,66 +1,75 @@
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <template>
-  <v-sheet min-width="300" width="300">
-    <div class="mx-3 pb-5">
-      <v-card min-height="80"
-        class="mb-5 bg-grey-lighten-2 d-flex
-        align-center"
+  <v-sheet
+    elevation="0"
+    min-width="300"
+    width="300"
+    height="min-content"
+    class="transparent"
+  >
+    <v-card
+      min-height="80"
+      elevation="0"
+      class="mb-5
+      currentColor
+      d-flex
+      align-center"
+    >
+      <v-card-title class="wrap">
+        <span v-show="!edit">
+          {{ theme.name  }}
+        </span>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          v-show="edit"
+        >
+          <v-textarea
+            v-model="themeText"
+            auto-grow
+            :counter="40"
+            :rules="themeRules"
+            variant="underlined"
+            rows="1"
+          />
+        </v-form>
+      </v-card-title>
+
+      <v-card-actions
+        class="ml-auto
+        gap
+        py-0
+        px-2
+        d-flex
+        flex-column
+        justify-space-between"
       >
-        <v-card-title  class="wrap">
-          <span v-show="!edit">{{ theme.name  }}</span>
-          <v-form ref="form" v-model="valid" lazy-validation v-show="edit">
-            <v-textarea
-              v-model="themeText"
-              auto-grow
-              :counter="40"
-              :rules="themeRules"
-              variant="underlined"
-              rows="1"
-            />
-          </v-form>
-        </v-card-title>
+        <v-btn
+          class="ma-0"
+          icon
+          @click="editTheme"
+          size="x-small"
+          :color="color"
+        >
+          <MyIcon :icon="icon" width="18"/>
+        </v-btn>
+        <v-btn
+          class="ma-0"
+          icon
+          size="x-small"
+          color="red"
+          @click="deleteTheme"
+        >
+          <MyIcon icon="mdi:trash" width="18"/>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 
-        <v-card-actions class="ml-auto gap py-0 px-2 d-flex flex-column justify-space-between">
-          <v-btn class="ma-0"
-            icon
-            @click="editTheme"
-            variant="tonal"
-            size="x-small"
-            :color="color"
-          >
-            <MyIcon :icon="icon" width="18"/>
-          </v-btn>
-          <v-btn class="ma-0"
-            icon
-            variant="tonal"
-            size="x-small"
-            color="red"
-            @click="deleteTheme"
-          >
-            <MyIcon icon="mdi:trash" width="18" />
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-
-      <task-list
-        :tasks="getTasksByThemeId(theme.id)" :themeId="theme.id">
-      </task-list>
-
-      <v-expansion-panels v-model="panel">
-        <v-expansion-panel value="add" elevation="0" class="border">
-          <v-expansion-panel-title style="opacity: .65;"
-            expand-icon="mdi-plus" collapse-icon="mdi-minus"
-          >
-            <v-btn variant="text" disabled style="opacity: 1;">ADD TASK</v-btn>
-          </v-expansion-panel-title>
-          <v-expansion-panel-text>
-            <task-form @close="none" class="pa-0"
-              :themeId="theme.id"
-            />
-          </v-expansion-panel-text>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </div>
+    <task-list
+      :tasks="getTasksByThemeId(theme.id)"
+      :themeId="theme.id"
+    />
   </v-sheet>
 </template>
 
@@ -69,16 +78,21 @@ import { defineComponent } from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 import { db } from '@/db';
 import TaskList from './TaskList.vue';
-import TaskForm from './TaskForm.vue';
 
 export default defineComponent({
   name: 'ChapterBoard',
-  components: { TaskList, TaskForm },
+  components: { TaskList },
   props: {
     theme: {
       type: Object,
       required: true,
     },
+    index: {
+      type: Number,
+    },
+  },
+  updated() {
+    this.updateIndex();
   },
   data() {
     return {
@@ -97,6 +111,13 @@ export default defineComponent({
   methods: {
     none() {
       this.panel = [];
+    },
+    updateIndex() {
+      if (this.theme.index !== this.index) {
+        db.themes.update(this.theme.id, {
+          index: this.index,
+        });
+      }
     },
     async editTheme() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
@@ -151,5 +172,11 @@ export default defineComponent({
   }
   .gap {
     gap: 4px;
+  }
+  .transparent {
+    background: transparent;
+  }
+  .currentColor {
+    background-color:rgb(232,232,232);
   }
 </style>

@@ -2,11 +2,13 @@
   <v-app-bar
     style="position: block;"
     color="teal-darken-4"
-    image="https://picsum.photos/1920/1080?random"
+    image="https://picsum.photos/1920/1080?grayscale"
   >
     <template v-slot:image>
       <v-img
-        gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"
+        gradient="to top right,
+        rgba(19,84,122,.8),
+        rgba(128,208,199,.8)"
       />
     </template>
     <v-img

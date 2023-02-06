@@ -1,10 +1,18 @@
 <template>
-  <v-dialog width="300px"
+  <v-dialog
+    width="300px"
     :modelValue="visibleEditDialog"
     @update:modelValue="setVisibleEditDialog"
   >
-    <v-sheet color="white py-1">
-      <div class="text-h4 d-flex justify-center">Edit</div>
+    <v-sheet color="white" class="py-1"
+    >
+      <div
+        class="text-h4
+        d-flex
+        justify-center"
+      >
+        Edit
+      </div>
       <slot></slot>
     </v-sheet>
   </v-dialog>

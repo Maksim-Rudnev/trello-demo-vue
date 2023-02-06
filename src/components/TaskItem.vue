@@ -1,34 +1,66 @@
 <template>
-  <v-expansion-panels class="mb-5">
-    <v-expansion-panel>
-
+  <v-expansion-panels
+    class="mb-5
+    rounded-lg
+    overflow-hidden"
+  >
+    <v-expansion-panel elevation="0">
       <v-expansion-panel-title class="pa-0">
-          <v-card elevation="0"  class="w-100 rounded-0">
-            <v-card-title class="pt-0 d-flex flex-column">
-              <v-sheet class="mb-3 align-self-center rounded-b-xl pl-10"
-                :color="colors[task.priority]" width="180" height="5"
-              />
-              {{ task.owner }}
-            </v-card-title>
-            <v-card-text>
-              {{ task.text }}
-            </v-card-text>
-          </v-card>
-      </v-expansion-panel-title>
-
-      <v-expansion-panel-text class="pa-0 ma-0">
-        <v-sheet class="d-flex lighten-3 px-4 my-2 justify-center gap">
-          <v-btn @click="setVisibleEditDialog(true),setSelectedTask(task.id)"
-            rounded size="small" color="info"
+        <v-card
+          elevation="0"
+          class="w-100
+          rounded-0"
+        >
+          <v-card-title
+            class="pt-0
+            d-flex
+            flex-column"
           >
-            <v-icon>mdi-pencil</v-icon>
+            <v-sheet
+              class="mb-3
+              align-self-center
+              rounded-b-xl
+              pl-10"
+              :color="colors[task.priority]"
+              width="180"
+              height="8"
+            />
+            {{ task.owner }}
+          </v-card-title>
+          <v-card-text>
+            {{ task.text }}
+          </v-card-text>
+        </v-card>
+      </v-expansion-panel-title>
+      <v-expansion-panel-text class="pa-0 ma-0">
+        <v-sheet
+          class="d-flex
+          lighten-3
+          px-4
+          my-2
+          justify-center
+          gap"
+        >
+          <v-btn
+            @click="setVisibleEditDialog(true),
+            setSelectedTask(task.id)"
+            rounded size="small"
+            color="info"
+          >
+            <v-icon>
+              mdi-pencil
+            </v-icon>
           </v-btn>
-          <v-btn @click="deleteTask" rounded size="small" color="red">
-            <MyIcon icon="mdi:trash" width="16" />
+          <v-btn
+            @click="deleteTask"
+            rounded
+            size="small"
+            color="red"
+          >
+            <MyIcon icon="mdi:trash" width="16"/>
           </v-btn>
         </v-sheet>
       </v-expansion-panel-text>
-
     </v-expansion-panel>
   </v-expansion-panels>
 </template>

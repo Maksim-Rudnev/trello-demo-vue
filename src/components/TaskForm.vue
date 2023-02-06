@@ -5,9 +5,7 @@
     lazy-validation
     class="px-1 pt-2"
   >
-    <slide-colors
-      v-model:modelValue="selectedRankColor"
-    />
+    <slide-colors v-model:modelValue="selectedRankColor"/>
 
     <v-text-field
       class="mt-2 mx-4"
@@ -28,7 +26,12 @@
       required
     />
 
-    <div class="d-flex justify-center mt-1 mb-3">
+    <div
+      class="d-flex
+      justify-center
+      mt-1
+      mb-3"
+    >
       <v-btn
         color="success"
         class="mr-4"
@@ -37,10 +40,7 @@
         submit
       </v-btn>
 
-      <v-btn
-        color="error"
-        @click="reset"
-      >
+      <v-btn color="error" @click="reset">
         Reset Form
       </v-btn>
     </div>

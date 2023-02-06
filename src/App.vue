@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <nav-bar/>
-    <v-main style="--v-layout-top:0px">
+    <v-main style="--v-layout-top: 0px">
       <router-view/>
     </v-main>
   </v-app>

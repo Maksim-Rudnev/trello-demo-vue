@@ -17,13 +17,14 @@
         @click="toggle($event),
         $emit('update:modelValue', model)"
       >
-      <v-tooltip
-        activator="parent"
-        location="top"
-      >
+      <v-tooltip activator="parent" location="top">
         {{ colors.indexOf(n) }}
       </v-tooltip>
-        <div class="d-flex fill-height align-center justify-center">
+        <div class="d-flex
+          fill-height
+          align-center
+          justify-center"
+        >
           <v-scale-transition>
             <v-icon
               v-if="isSelected"

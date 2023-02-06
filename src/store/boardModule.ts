@@ -46,7 +46,7 @@ const boardModule = {
       commit('setTasks', data);
     },
     async setThemes({ commit }: { commit: Commit }) {
-      const data = await db.themes.toArray();
+      const data = await db.themes.toCollection().sortBy('index');
       commit('setThemes', data);
     },
   },

@@ -74,4 +74,7 @@ export default {
   position: absolute;
   background-color: green;
 }
+.food {
+  background-color: red;
+}
 </style>

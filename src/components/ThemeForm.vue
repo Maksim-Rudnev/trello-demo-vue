@@ -4,6 +4,7 @@
     ref="form"
     v-model="valid"
     lazy-validation
+    @submit.prevent
   >
     <v-text-field
       trim
@@ -15,18 +16,19 @@
       label="Theme"
       required
     />
-    <div class="d-flex justify-center">
+    <div
+      class="d-flex
+      justify-center"
+    >
       <v-btn
+        prevent
         class="mb-3"
         color="success"
         size="small"
         @click="validate"
       >
         submit
-        <v-icon
-          class="pl-2"
-          icon="mdi-checkbox-marked-circle"
-        />
+        <v-icon class="pl-2" icon="mdi-checkbox-marked-circle"/>
       </v-btn>
     </div>
   </v-form>
