@@ -1,10 +1,11 @@
-import { Task } from '@/models/Task';
-import { Theme } from '@/models/Theme';
+import { ITask } from '@/models/ITask';
+import { ITheme } from '@/models/ITheme';
+import { IBoardState } from '@/models/IBoardState';
 import { Commit } from 'vuex';
 import { db } from '@/db';
 
 const boardModule = {
-  state: () => ({
+  state: (): IBoardState => ({
     tasks: [],
     themes: [],
     colors: ['#9C27B0', '#673AB7', '#3F51B5', '#2196F3',
@@ -15,10 +16,10 @@ const boardModule = {
     selectedTask: 0,
   }),
   mutations: {
-    setTasks(state: { tasks: Task[]; }, payload: Task[]) {
+    setTasks(state: { tasks: ITask[]; }, payload: ITask[]) {
       state.tasks = payload;
     },
-    setThemes(state: { themes: Theme[]; }, payload: Theme[]) {
+    setThemes(state: { themes: ITheme[]; }, payload: ITheme[]) {
       state.themes = payload;
     },
     setResetForm(state: { resetForm: boolean; }, payload: boolean) {
@@ -32,15 +33,16 @@ const boardModule = {
     },
   },
   getters: {
-    getTaskByThemeId: (state: { tasks: Task[]; }) => (id: number) => state.tasks
+
+    getTasksByThemeId: (state: { tasks: ITask[]; }) => (id: number) => state.tasks
       .filter((task) => Number(task.themeId) === id),
 
-    getSelectedTask: (state: { tasks: Task[], selectedTask: number }) => (state.tasks
+    getSelectedTask: (state: { tasks: ITask[], selectedTask: number }) => (state.tasks
       .filter((el) => el.id === state.selectedTask))[0],
   },
   actions: {
     async setTasks({ commit }: { commit: Commit }) {
-      const data = await db.tasks.toArray();
+      const data = await db.tasks.toCollection().sortBy('index');
       commit('setTasks', data);
     },
     async setThemes({ commit }: { commit: Commit }) {

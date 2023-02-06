@@ -1,12 +1,13 @@
 <template>
-  <v-expansion-panels class="mb-3">
+  <v-expansion-panels class="mb-5">
     <v-expansion-panel>
+
       <v-expansion-panel-title class="pa-0">
           <v-card elevation="0"  class="w-100 rounded-0">
             <v-card-title class="pt-0 d-flex flex-column">
               <v-sheet class="mb-3 align-self-center rounded-b-xl pl-10"
-                :color="colors[task.priority]" width="180" height="5">
-              </v-sheet>
+                :color="colors[task.priority]" width="180" height="5"
+              />
               {{ task.owner }}
             </v-card-title>
             <v-card-text>
@@ -14,9 +15,9 @@
             </v-card-text>
           </v-card>
       </v-expansion-panel-title>
+
       <v-expansion-panel-text class="pa-0 ma-0">
         <v-sheet class="d-flex lighten-3 px-4 my-2 justify-center gap">
-
           <v-btn @click="setVisibleEditDialog(true),setSelectedTask(task.id)"
             rounded size="small" color="info"
           >
@@ -27,6 +28,7 @@
           </v-btn>
         </v-sheet>
       </v-expansion-panel-text>
+
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
@@ -42,6 +44,9 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    index: {
+      type: Number,
+    },
   },
   computed: {
     ...mapState({
@@ -49,7 +54,17 @@ export default defineComponent({
     }),
   },
   name: 'TaskItem',
+  updated() {
+    this.updateIndex();
+  },
   methods: {
+    updateIndex() {
+      if (this.task.index !== this.index) {
+        db.tasks.update(this.task.id, {
+          index: this.index,
+        });
+      }
+    },
     ...mapActions({
       setTasks: 'board/setTasks',
     }),
@@ -58,18 +73,13 @@ export default defineComponent({
       setSelectedTask: 'board/setSelectedTask',
     }),
     async deleteTask() {
-      try {
-        await db.tasks.delete(this.task.id);
-        this.setTasks();
-      } catch (error) {
-        console.log(error);
-      }
+      await db.tasks.delete(this.task.id);
+      this.setTasks();
     },
   },
 });
 </script>
-<style>
+<style scoped>
 .gap {
   gap: 20px;
-}
-</style>
+}</style>

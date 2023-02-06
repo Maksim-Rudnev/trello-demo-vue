@@ -14,7 +14,7 @@
       :rules="themeRules"
       label="Theme"
       required
-    ></v-text-field>
+    />
     <div class="d-flex justify-center">
       <v-btn
         class="mb-3"
@@ -26,7 +26,7 @@
         <v-icon
           class="pl-2"
           icon="mdi-checkbox-marked-circle"
-        ></v-icon>
+        />
       </v-btn>
     </div>
   </v-form>
@@ -51,21 +51,16 @@ export default defineComponent({
   methods: {
     ...mapActions({
       setThemes: 'board/setThemes',
-      setTasks: 'board/setTasks',
     }),
     async validate() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
 
       if (valid) {
-        try {
-          await db.themes.add({
-            name: this.theme,
-          });
-          this.$emit('close');
-          this.setThemes();
-        } catch (error) {
-          console.log(error);
-        }
+        await db.themes.add({
+          name: this.theme,
+        });
+        this.$emit('close');
+        this.setThemes();
       }
     },
   },

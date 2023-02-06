@@ -7,7 +7,7 @@
   >
     <slide-colors
       v-model:modelValue="selectedRankColor"
-    ></slide-colors>
+    />
 
     <v-text-field
       class="mt-2 mx-4"
@@ -16,7 +16,7 @@
       :rules="ownerRules"
       label="Owner"
       required
-    ></v-text-field>
+    />
 
     <v-textarea
       class="mx-4"
@@ -26,7 +26,7 @@
       :rules="textRules"
       label="Text"
       required
-    ></v-textarea>
+    />
 
     <div class="d-flex justify-center mt-1 mb-3">
       <v-btn
@@ -104,23 +104,19 @@ export default defineComponent({
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
 
       if (valid) {
-        try {
-          if (this.action === 'EDIT') {
-            db.tasks.update(this.task.id, {
-              owner: this.owner.trim(),
-              text: this.text.trim(),
-              priority: this.selectedRankColor ?? 0,
-            });
-          } else {
-            await db.tasks.add({
-              owner: this.owner.trim(),
-              text: this.text.trim(),
-              priority: this.selectedRankColor ?? 0,
-              themeId: this.themeId,
-            });
-          }
-        } catch (error) {
-          console.log(error);
+        if (this.action === 'EDIT') {
+          db.tasks.update(this.task.id, {
+            owner: this.owner.trim(),
+            text: this.text.trim(),
+            priority: this.selectedRankColor ?? 0,
+          });
+        } else {
+          await db.tasks.add({
+            owner: this.owner.trim(),
+            text: this.text.trim(),
+            priority: this.selectedRankColor ?? 0,
+            themeId: this.themeId,
+          });
         }
         this.setTasks();
         this.$emit('close');

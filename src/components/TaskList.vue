@@ -1,38 +1,83 @@
 <template>
-  <transition-group name="list" tag="ul">
-    <task-item
-      v-for="task in tasks"
-      :task="task"
-      :key="task.id"
-    >
-    </task-item>
-  </transition-group>
+  <draggable
+    :list="tasksList"
+    group="list"
+    :component-data="{name:'list', type: 'transition-group'}"
+    itemKey="id"
+    @change="log"
+    v-bind="dragOptions"
+  >
+    <template #item="{ element, index }">
+      <task-item :task="element" :index="index"/>
+    </template>
+  </draggable>
 </template>
 
 <script lang='ts'>
 import { defineComponent, PropType } from 'vue';
-import { Task } from '@/models/Task';
+import { ITask } from '@/models/ITask';
+import { IDragEvent } from '@/models/IDragEvent';
+import draggable from 'vuedraggable';
+import { db } from '@/db';
+import { mapActions, mapMutations } from 'vuex';
 import TaskItem from './TaskItem.vue';
 
 export default defineComponent({
   name: 'TaskList',
-  components: { TaskItem },
+  components: { TaskItem, draggable },
   props: {
     tasks: {
-      type: Array as PropType<Task[]>,
+      type: Array as PropType<ITask[]>,
       required: true,
+    },
+    themeId: {
+      type: Number,
+    },
+  },
+  data() {
+    return {
+      tasksList: [] as ITask[],
+    };
+  },
+  created() {
+    this.refreshData();
+  },
+
+  methods: {
+    refreshData() {
+      this.tasksList = [...this.tasks];
+    },
+    log(evt: IDragEvent) {
+      if ('added' in evt && evt.added?.element.id !== undefined) {
+        db.tasks.update(evt.added?.element.id, {
+          index: evt.added?.newIndex,
+          themeId: this.themeId,
+        });
+      }
+    },
+    ...mapActions({
+      setTasks: 'board/setTasks',
+    }),
+    ...mapMutations({
+      setUpdateData: 'board/setUpdateData',
+    }),
+  },
+  watch: {
+    tasks: {
+      handler() {
+        this.refreshData();
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 300,
+        disabled: false,
+        ghostClass: 'ghost',
+      };
     },
   },
 });
 </script>
-<style scoped>
-  .list-enter-active,
-  .list-leave-active {
-  transition: 0.5s all ease;
-  }
-  .list-enter-from,
-  .list-leave-to {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-</style>

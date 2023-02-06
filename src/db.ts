@@ -1,11 +1,11 @@
 import Dexie, { Table } from 'dexie';
-import { Task } from './models/Task';
-import { Theme } from './models/Theme';
+import { ITask } from './models/ITask';
+import { ITheme } from './models/ITheme';
 
 export class MySubClassedDexie extends Dexie {
-  themes!: Table<Theme>;
+  themes!: Table<ITheme>;
 
-  tasks!: Table<Task>;
+  tasks!: Table<ITask>;
 
   constructor() {
     super('myDatabase');

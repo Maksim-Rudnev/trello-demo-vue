@@ -4,17 +4,17 @@
     <task-form :task="getSelectedTask" action="EDIT"/>
   </edit-dialog>
   <div
-      class="pt-5 px-2
-      overflow-x-auto
-      overflow-y-hidden
-      h-100"
-    >
+    class="pt-5 px-2
+    overflow-x-auto
+    overflow-y-hidden
+    h-100"
+  >
     <transition-group class="d-flex flex-row " name="list" tag="ul">
       <chapter-board
         v-for="theme in themes"
         :key="theme.id"
-        :theme="theme">
-      </chapter-board>
+        :theme="theme"
+      />
       <v-sheet :key="-1">
         <v-expansion-panels v-model="panel">
           <v-expansion-panel value="add" elevation="0" class="border">
@@ -28,14 +28,14 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-sheet>
-  </transition-group>
-    </div>
+    </transition-group>
+  </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { Theme } from '@/models/Theme';
+import { ITheme } from '@/models/ITheme';
 import ChapterBoard from './ChapterBoard.vue';
 import ThemeForm from './ThemeForm.vue';
 import EditDialog from './EditDialog.vue';
@@ -56,7 +56,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      themes: (state: any): Theme[] => state.board.themes,
+      themes: (state: any): ITheme[] => state.board.themes,
     }),
     ...mapGetters({
       getSelectedTask: 'board/getSelectedTask',
@@ -70,10 +70,6 @@ export default defineComponent({
     none() {
       this.panel = [];
     },
-  },
-  beforeMount() {
-    this.setThemes();
-    this.setTasks();
   },
 });
 </script>

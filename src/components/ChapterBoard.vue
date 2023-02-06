@@ -16,9 +16,10 @@
               :rules="themeRules"
               variant="underlined"
               rows="1"
-            ></v-textarea>
+            />
           </v-form>
         </v-card-title>
+
         <v-card-actions class="ml-auto gap py-0 px-2 d-flex flex-column justify-space-between">
           <v-btn class="ma-0"
             icon
@@ -27,7 +28,7 @@
             size="x-small"
             :color="color"
           >
-            <MyIcon :icon="icon" width="18" />
+            <MyIcon :icon="icon" width="18"/>
           </v-btn>
           <v-btn class="ma-0"
             icon
@@ -40,13 +41,16 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+
       <task-list
-        :tasks="getTaskByThemeId(theme.id)">
+        :tasks="getTasksByThemeId(theme.id)" :themeId="theme.id">
       </task-list>
+
       <v-expansion-panels v-model="panel">
         <v-expansion-panel value="add" elevation="0" class="border">
           <v-expansion-panel-title style="opacity: .65;"
-          expand-icon="mdi-plus" collapse-icon="mdi-minus">
+            expand-icon="mdi-plus" collapse-icon="mdi-minus"
+          >
             <v-btn variant="text" disabled style="opacity: 1;">ADD TASK</v-btn>
           </v-expansion-panel-title>
           <v-expansion-panel-text>
@@ -107,14 +111,10 @@ export default defineComponent({
         this.color = 'info';
         this.icon = 'mdi-pencil';
         if (valid && this.themeText !== this.theme.name) {
-          try {
-            db.themes.update(this.theme.id, {
-              name: this.themeText,
-            });
-            this.setThemes();
-          } catch (error) {
-            console.log(error);
-          }
+          db.themes.update(this.theme.id, {
+            name: this.themeText,
+          });
+          this.setThemes();
         }
       }
     },
@@ -123,19 +123,15 @@ export default defineComponent({
       setThemes: 'board/setThemes',
     }),
     async deleteTheme() {
-      try {
-        await db.themes.delete(this.theme.id);
-        await db.tasks.where('themeId').anyOf(this.theme.id).delete();
-        this.setThemes();
-        this.setTasks();
-      } catch (error) {
-        console.log(error);
-      }
+      await db.themes.delete(this.theme.id);
+      await db.tasks.where('themeId').anyOf(this.theme.id).delete();
+      this.setThemes();
+      this.setTasks();
     },
   },
   computed: {
     ...mapGetters({
-      getTaskByThemeId: 'board/getTaskByThemeId',
+      getTasksByThemeId: 'board/getTasksByThemeId',
     }),
   },
 });

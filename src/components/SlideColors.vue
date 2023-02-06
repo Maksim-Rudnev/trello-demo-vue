@@ -19,7 +19,8 @@
       >
       <v-tooltip
         activator="parent"
-        location="top">
+        location="top"
+      >
         {{ colors.indexOf(n) }}
       </v-tooltip>
         <div class="d-flex fill-height align-center justify-center">
@@ -29,7 +30,7 @@
               color="black"
               size="14"
               icon="mdi-close-circle-outline"
-            ></v-icon>
+            />
           </v-scale-transition>
         </div>
       </v-card>
