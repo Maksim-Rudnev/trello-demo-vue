@@ -4,9 +4,9 @@
     v-model="valid"
     lazy-validation
     class="px-1 pt-2"
+    @submit.prevent
   >
     <slide-colors v-model:modelValue="selectedRankColor"/>
-
     <v-text-field
       class="mt-2 mx-4"
       v-model="owner"
@@ -14,8 +14,8 @@
       :rules="ownerRules"
       label="Owner"
       required
+      @keyup.enter="validate"
     />
-
     <v-textarea
       class="mx-4"
       rows="3"
@@ -24,8 +24,8 @@
       :rules="textRules"
       label="Text"
       required
+      @keyup.enter.exact="validate"
     />
-
     <div
       class="d-flex
       justify-center
@@ -39,7 +39,6 @@
       >
         submit
       </v-btn>
-
       <v-btn color="error" @click="reset">
         Reset Form
       </v-btn>
@@ -48,9 +47,10 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/db';
 import { defineComponent } from 'vue';
 import { mapActions, mapMutations } from 'vuex';
+
+import { db } from '@/db';
 import SlideColors from './SlideColors.vue';
 
 export default defineComponent({
@@ -78,7 +78,6 @@ export default defineComponent({
       (v: string) => !!v.trim() || 'Owner is required',
       (v: string) => (v && v.length <= 20) || 'Owner must be less than 20 characters',
     ],
-
     text: '',
     textRules: [
       (v: string) => !!v.trim() || 'Text is required',
@@ -102,18 +101,17 @@ export default defineComponent({
     }),
     async validate() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
-
       if (valid) {
         if (this.action === 'EDIT') {
           db.tasks.update(this.task.id, {
-            owner: this.owner.trim(),
-            text: this.text.trim(),
+            owner: this.owner.trim().replace(/\s+/g, ' ').trim(),
+            text: this.text.trim().replace(/\s+/g, ' ').trim(),
             priority: this.selectedRankColor ?? 0,
           });
         } else {
           await db.tasks.add({
-            owner: this.owner.trim(),
-            text: this.text.trim(),
+            owner: this.owner.trim().replace(/\s+/g, ' ').trim(),
+            text: this.text.trim().replace(/\s+/g, ' ').trim(),
             priority: this.selectedRankColor ?? 0,
             themeId: this.themeId,
           });

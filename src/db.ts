@@ -1,6 +1,7 @@
 import Dexie, { Table } from 'dexie';
-import { ITask } from './models/ITask';
-import { ITheme } from './models/ITheme';
+
+import { ITask } from './interfaces/ITask';
+import { ITheme } from './interfaces/ITheme';
 
 export class MySubClassedDexie extends Dexie {
   themes!: Table<ITheme>;

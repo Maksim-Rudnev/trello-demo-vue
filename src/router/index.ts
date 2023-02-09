@@ -1,19 +1,19 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import HomeView from '@/views/HomeView.vue';
+
+import MainView from '@/views/MainView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: MainView,
   },
   {
     path: '/snake',
     name: 'snake',
-    component: () => import('@/components/TheRest.vue'),
+    component: () => import('@/components/TheSnake.vue'),
   },
 ];
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,

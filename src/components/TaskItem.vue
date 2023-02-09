@@ -1,5 +1,6 @@
 <template>
   <v-expansion-panels
+    v-model="panel"
     class="mb-5
     rounded-lg
     overflow-hidden"
@@ -57,7 +58,7 @@
             size="small"
             color="red"
           >
-            <MyIcon icon="mdi:trash" width="16"/>
+            <CustomIcon icon="mdi:trash" width="16"/>
           </v-btn>
         </v-sheet>
       </v-expansion-panel-text>
@@ -67,10 +68,14 @@
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
-import { db } from '@/db';
 import { mapActions, mapMutations, mapState } from 'vuex';
 
+import { db } from '@/db';
+import closePanelMixin from '../mixins/closePanelMixin';
+
 export default defineComponent({
+  name: 'TaskItem',
+  mixins: [closePanelMixin],
   props: {
     task: {
       type: Object,
@@ -85,7 +90,6 @@ export default defineComponent({
       colors: (state: any): string[] => state.board.colors,
     }),
   },
-  name: 'TaskItem',
   updated() {
     this.updateIndex();
   },
@@ -111,7 +115,9 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
 .gap {
   gap: 20px;
-}</style>
+}
+</style>

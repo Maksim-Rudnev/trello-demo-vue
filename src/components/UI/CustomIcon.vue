@@ -1,5 +1,5 @@
 <template>
-  <Icon></Icon>
+  <Icon/>
 </template>
 
 <script lang="ts">
@@ -8,7 +8,7 @@ import { Icon } from '@iconify/vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'MyIcon',
+  name: 'CustomIcon',
   components: { Icon },
 });
 </script>

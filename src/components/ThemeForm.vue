@@ -15,13 +15,13 @@
       :rules="themeRules"
       label="Theme"
       required
+      @keyup.enter="validate"
     />
     <div
       class="d-flex
       justify-center"
     >
       <v-btn
-        prevent
         class="mb-3"
         color="success"
         size="small"
@@ -35,9 +35,10 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/db';
 import { defineComponent } from 'vue';
 import { mapActions } from 'vuex';
+
+import { db } from '@/db';
 
 export default defineComponent({
   name: 'ThemeForm',
@@ -45,21 +46,19 @@ export default defineComponent({
     valid: true,
     theme: '',
     themeRules: [
-      (v: string) => !!v || 'Theme is required',
+      (v: string) => !!v.trim() || 'Theme is required',
       (v: string) => (v && v.length <= 40) || 'Theme must be less than 40 characters',
     ],
   }),
-
   methods: {
     ...mapActions({
       setThemes: 'board/setThemes',
     }),
     async validate() {
       const { valid } = await (this.$refs.form as HTMLFormElement).validate();
-
       if (valid) {
         await db.themes.add({
-          name: this.theme,
+          name: this.theme.replace(/\s+/g, ' ').trim(),
         });
         this.$emit('close');
         this.setThemes();

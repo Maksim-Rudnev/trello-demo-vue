@@ -1,6 +1,7 @@
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <template>
   <v-sheet
+    @click.capture="setCloseAllPanel(false)"
     elevation="0"
     min-width="300"
     width="300"
@@ -13,7 +14,8 @@
       class="mb-5
       currentColor
       d-flex
-      align-center"
+      align-center
+      border"
     >
       <v-card-title class="wrap">
         <span v-show="!edit">
@@ -32,10 +34,10 @@
             :rules="themeRules"
             variant="underlined"
             rows="1"
+            @keyup.enter.exact="editTheme"
           />
         </v-form>
       </v-card-title>
-
       <v-card-actions
         class="ml-auto
         gap
@@ -52,7 +54,7 @@
           size="x-small"
           :color="color"
         >
-          <MyIcon :icon="icon" width="18"/>
+          <CustomIcon :icon="icon" width="18"/>
         </v-btn>
         <v-btn
           class="ma-0"
@@ -61,11 +63,10 @@
           color="red"
           @click="deleteTheme"
         >
-          <MyIcon icon="mdi:trash" width="18"/>
+          <CustomIcon icon="mdi:trash" width="18"/>
         </v-btn>
       </v-card-actions>
     </v-card>
-
     <task-list
       :tasks="getTasksByThemeId(theme.id)"
       :themeId="theme.id"
@@ -75,7 +76,8 @@
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
+
 import { db } from '@/db';
 import TaskList from './TaskList.vue';
 
@@ -98,7 +100,6 @@ export default defineComponent({
     return {
       color: 'info',
       icon: 'mdi-pencil',
-      panel: [],
       edit: false,
       valid: true,
       themeText: '',
@@ -109,9 +110,6 @@ export default defineComponent({
     };
   },
   methods: {
-    none() {
-      this.panel = [];
-    },
     updateIndex() {
       if (this.theme.index !== this.index) {
         db.themes.update(this.theme.id, {
@@ -127,18 +125,20 @@ export default defineComponent({
         this.color = 'success';
         this.icon = 'mingcute:save-fill';
       }
-
       if (!this.edit) {
         this.color = 'info';
         this.icon = 'mdi-pencil';
         if (valid && this.themeText !== this.theme.name) {
           db.themes.update(this.theme.id, {
-            name: this.themeText,
+            name: this.themeText.replace(/\s+/g, ' ').trim(),
           });
           this.setThemes();
         }
       }
     },
+    ...mapMutations({
+      setCloseAllPanel: 'board/setCloseAllPanel',
+    }),
     ...mapActions({
       setTasks: 'board/setTasks',
       setThemes: 'board/setThemes',
@@ -157,26 +157,27 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
-  .border {
-    border: 1px solid;
-    border-color: rgb(229,229,229);
-    border-radius: 4px;
-  }
-  .v-expansion-panel-text__wrapper {
-    padding: 6px 1px;
-  }
-  .wrap {
-    flex: initial;
-    white-space: inherit;
-  }
-  .gap {
-    gap: 4px;
-  }
-  .transparent {
-    background: transparent;
-  }
-  .currentColor {
-    background-color:rgb(232,232,232);
-  }
+.border {
+  border: 1px solid;
+  border-color: rgb(229,229,229);
+  border-radius: 4px;
+}
+.v-expansion-panel-text__wrapper {
+  padding: 6px 1px;
+}
+.wrap {
+  flex: initial;
+  white-space: inherit;
+}
+.gap {
+  gap: 4px;
+}
+.transparent {
+  background: transparent;
+}
+.currentColor {
+  background-color:rgb(232,232,232);
+}
 </style>

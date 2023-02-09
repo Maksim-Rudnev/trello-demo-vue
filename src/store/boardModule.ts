@@ -1,8 +1,9 @@
-import { ITask } from '@/models/ITask';
-import { ITheme } from '@/models/ITheme';
-import { IBoardState } from '@/models/IBoardState';
 import { Commit } from 'vuex';
 import { db } from '@/db';
+
+import { ITask } from '@/interfaces/ITask';
+import { ITheme } from '@/interfaces/ITheme';
+import { IBoardState } from '@/interfaces/IBoardState';
 
 const boardModule = {
   state: (): IBoardState => ({
@@ -14,6 +15,7 @@ const boardModule = {
     resetForm: false,
     visibleEditDialog: false,
     selectedTask: 0,
+    closeAllPanel: false,
   }),
   mutations: {
     setTasks(state: { tasks: ITask[]; }, payload: ITask[]) {
@@ -31,9 +33,11 @@ const boardModule = {
     setSelectedTask(state: { selectedTask: number; }, payload: number) {
       state.selectedTask = payload;
     },
+    setCloseAllPanel(state: { closeAllPanel: boolean; }, payload: boolean) {
+      state.closeAllPanel = payload;
+    },
   },
   getters: {
-
     getTasksByThemeId: (state: { tasks: ITask[]; }) => (id: number) => state.tasks
       .filter((task) => Number(task.themeId) === id),
 
@@ -52,5 +56,4 @@ const boardModule = {
   },
   namespaced: true,
 };
-
 export default boardModule;

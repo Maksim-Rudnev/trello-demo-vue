@@ -51,17 +51,20 @@
 
 <script lang='ts'>
 import { defineComponent, PropType } from 'vue';
-import { ITask } from '@/models/ITask';
-import { IDragEvent } from '@/models/IDragEvent';
 import draggable from 'vuedraggable';
-import { db } from '@/db';
 import { mapActions, mapMutations } from 'vuex';
+
+import { db } from '@/db';
+import { ITask } from '@/interfaces/ITask';
+import { IDragEvent } from '@/interfaces/IDragEvent';
 import TaskItem from './TaskItem.vue';
 import TaskForm from './TaskForm.vue';
+import closePanelMixin from '../mixins/closePanelMixin';
 
 export default defineComponent({
   name: 'TaskList',
   components: { TaskItem, draggable, TaskForm },
+  mixins: [closePanelMixin],
   props: {
     tasks: {
       type: Array as PropType<ITask[]>,
@@ -73,18 +76,13 @@ export default defineComponent({
   },
   data() {
     return {
-      panel: [],
       tasksList: [] as ITask[],
     };
   },
   created() {
     this.refreshData();
   },
-
   methods: {
-    none() {
-      this.panel = [];
-    },
     refreshData() {
       this.tasksList = [...this.tasks];
     },
@@ -127,7 +125,6 @@ export default defineComponent({
   border: 1px solid lightgrey;
   border-radius: 3px;
 }
-
 .ghost {
   opacity: 0;
 }

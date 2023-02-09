@@ -25,10 +25,14 @@ export default {
   methods: {
     move() {
       const newHead = { ...this.snake[0] };
-      if (this.direction === 'right') newHead.x += 10;
-      if (this.direction === 'left') newHead.x -= 10;
-      if (this.direction === 'up') newHead.y -= 10;
-      if (this.direction === 'down') newHead.y += 10;
+
+      switch (this.direction) {
+        case 'right': newHead.x += 10; break;
+        case 'left': newHead.x -= 10; break;
+        case 'up': newHead.y -= 10; break;
+        case 'down': newHead.y += 10; break;
+        default: break;
+      }
 
       if (newHead.x >= this.width || newHead.x < 0 || newHead.y >= this.height || newHead.y < 0) {
         window.location.reload();
@@ -39,7 +43,6 @@ export default {
       } else {
         this.snake.pop();
       }
-
       this.snake.unshift(newHead);
     },
     changeDirection(event) {
@@ -66,7 +69,6 @@ export default {
   position: relative;
   background-color: #ddd;
 }
-
 .snake,
 .food {
   width: 10px;

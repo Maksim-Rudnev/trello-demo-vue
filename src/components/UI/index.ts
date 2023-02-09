@@ -1,5 +1,5 @@
-import MyIcon from './MyIcon.vue';
+import CustomIcon from './CustomIcon.vue';
 
 export default [
-  MyIcon,
+  CustomIcon,
 ];

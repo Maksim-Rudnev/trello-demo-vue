@@ -40,7 +40,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue';
 import { mapState, mapMutations } from 'vuex';
 

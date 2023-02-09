@@ -8,4 +8,5 @@ export interface IBoardState {
   resetForm: boolean,
   visibleEditDialog: boolean,
   selectedTask: number,
+  closeAllPanel: boolean,
 }

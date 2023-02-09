@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue';
 import { mapActions } from 'vuex';
+
 import BoardTasks from '../components/BoardTasks.vue';
 
 export default defineComponent({
